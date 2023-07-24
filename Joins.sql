@@ -40,7 +40,7 @@ insert into Orders values(103,3,2,'2023-07-01',null,null)
 insert into Orders values(104,4,1,'2023-07-01','2023-07-02',null)
 insert into Orders values(105,5,3,'2023-07-02','2023-07-03',null)
 insert into Orders values(106,6,1,'2023-07-02','2023-07-04','2023-07-10')
-insert into Orders values(107,,2,'2023-07-03','2023-07-04','2023-07-11')
+insert into Orders values(107,2,2,'2023-07-03','2023-07-04','2023-07-11')
 insert into Orders values(108,3,3,'2023-07-04','2023-07-06','2023-07-18')
 insert into Orders values(109,3,2,'2023-07-05','2023-07-06','2023-07-18')
 insert into Orders values(110,2,1,null,'2023-07-05','2023-07-11')
@@ -57,6 +57,15 @@ select * from Orderstatus
 select * from Orders
 select c1.*, o1.*
 from Customers c1
+inner join Orders o1 on o1.customerid=c1.customerid
+select c1.*, o1.*
+from Customers c1
+right join Orders o1 on o1.customerid=c1.customerid
+select c1.*, o1.*
+from Customers c1
 left join Orders o1 on o1.customerid=c1.customerid
+select c1.*, o1.*
+from Customers c1
+full join Orders o1 on o1.customerid=c1.customerid
 
 
