@@ -93,8 +93,12 @@ select 'PostCode' as 'Pno'
 select 'Customer' as 'Cosumner'
 
 --36.	List the number of customers in each country.
-
+select  Country,count(id) from Customer
+ group by Country
 --37.	List the number of customers in each country, ordered by the country with the most customers first.
+select  Country,count(id) from Customer
+ group by Country
+ order by Count(id)
 
 
 --41.	Delete the column Birthday from the Persons table
