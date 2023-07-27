@@ -96,5 +96,10 @@ from Emloyee
 inner join Deptt on Deptt.did=Emloyee.did
 
 
+--WQT find out te genderwise Employee ount
+--WOT find out te degination in wi more tan two emp are working 
+findout te address were only one emp is liing
+wQT findout deptwise ag salary
+find out dept were max emp are workin 
 
 
