@@ -66,31 +66,32 @@ select * from Award
 
 sp_help Award
 
-----SELECT b.book_name, a.author_name, am.award_name
---FROM Book b
---JOIN Awards aw ON b.book_id = aw.book_id
---JOIN Author a ON b.author_id = a.author_id
---JOIN AwardsMaster am ON aw.award_type_id = am.award_type_id;
-
 --1.	Write a query to show book name , author name and award name for all books which has received any award. 
 select b.BookName,a.author_Name,aw.Award_Name from Book b  
 inner join Award am on b.BookId=am.BookId 
 inner join Author a on b.AuthorId=a.AuthorId 
 inner join AwardMaster aw on aw.AwardTypeId=am.AwardTypeId
 
+------------------------------------------------------------------------------------------------------------------------------
          
 --2.	Write a query to update author name of authors whose book price is > 100. Prefix author name with ‘Honourable’ .
       update author_Name from Author where in(select BookId)
+------------------------------------------------------------------------------------------------------------------------------
 
 --3.	Write a query to display authors and number of books written by that author.
 --Show author who has written maximum books at the top. 
      select top (1) a.author_Name,count(*) from Author a join Book b on  a.AuthorId=b.AuthorId
 	 group by a.author_Name
-	 
+------------------------------------------------------------------------------------------------------------------------------
 --4.	Write a query to select book name with 5 th highest price.
 select  * from Book order by Price desc offset 4 rows fetch next 1 rows only
+
+------------------------------------------------------------------------------------------------------------------------------
+
 --5.	Select list of books which have same price as book ‘Diary of Ann Frank’.
 select BookName from Book where price in(select price from Book where BookName='Diary of Ann Frank')
+------------------------------------------------------------------------------------------------------------------------------
+
 
 --6.	Increase price of all books written by Mr. Chetan Bhagat by 20%.
 update  b  set b.Price=b.Price+(b.Price*0.2 )from book b
@@ -99,16 +100,17 @@ b.AuthorId=a.AuthorId where a.author_Name='Soma Mohite'
 update Book set Price=Price+Price*0.2 where AuthorId 
 in(select AuthorId from Author where author_Name='Soma Mohite')
 
+------------------------------------------------------------------------------------------------------------------------------
 
-update 
-select * from Book
- 
 --7.	Show award names and number of books which got these awards. 
 select award_name,count(*) from AwardMaster m,book b,award a
 where m.AwardTypeId=a.AwardTypeId and a.BookId=b.BookId group by Award_Name;
+------------------------------------------------------------------------------------------------------------------------------
+
 
 --8.	Delete all books written by ‘Chetan Bhagat’ 
 delete from Book where AuthorId in (select AuthorId from Author where author_Name='Chetan Bhagat')
+------------------------------------------------------------------------------------------------------------------------------
 
 --join
 delete b  from book b,Author a where 
@@ -119,24 +121,45 @@ alter table award drop constraint FK__Award__BookId__3F466844
 
 alter table award add constraint bid_FK foreign key(BookId) references book(bookId)
 on delete cascade on update cascade;
+------------------------------------------------------------------------------------------------------------------------------
 
 --9.	Create view to show name of book and year when it has received award. 
+create view GetByBookYear
+as
+select b.BookName,am.Years from Book b  
+inner join Award am on b.BookId=am.BookId 
+
+select * from GetByBookYear
+------------------------------------------------------------------------------------------------------------------------------
 
 --10.	Create trigger to ensure min price of any book must be Rs. 100. 
 
 --11.	Increase price of book by 10% if that book has received any award.
 update Book set Price=Price+Price*0.1 where BookId in( select BookId from Award where AwardId is not null)
 select * from Book
+------------------------------------------------------------------------------------------------------------------------------
+
 --12.	Show names of author and number of books written by that Author.
 
 select a.author_Name,COUNT(b.BookId) as 'number of books'
 from Author a join Book b
 on a.AuthorId=b.AuthorId
 group by a.author_Name
+------------------------------------------------------------------------------------------------------------------------------
 
 --13.	Show names of authors whose books are published before year 2020.
 select author_Name from Author where AuthorId in(select AuthorId from Book where PublisherDate <2020)
+------------------------------------------------------------------------------------------------------------------------------
+
+
 --14.	Show name of books which has published within 1 year after 15 August 2020.
 select BookName from Book where PublisherDate between '2020-08-16' and '2021-08-15'
+------------------------------------------------------------------------------------------------------------------------------
+
 --15.	Delete all authors whose no book is published in year 2020.
-delete  from Author  where AuthorId in(select AuthorId from Book where PublisherDate between '2020-01-01' and '2020-12-31')
+sp_help award
+alter table award drop constraint FK__Award__AwardType__3D5E1FD2
+
+alter table award add constraint aid_FK foreign key(AuthorId) references Author(AuthorId)
+on delete cascade on update cascade;
+delete  from  Author  where AuthorId in(select AuthorId from Book where PublisherDate between '2020-01-01' and '2020-12-31')
