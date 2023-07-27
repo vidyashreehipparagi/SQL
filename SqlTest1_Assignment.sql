@@ -75,7 +75,15 @@ inner join AwardMaster aw on aw.AwardTypeId=am.AwardTypeId
 ------------------------------------------------------------------------------------------------------------------------------
          
 --2.	Write a query to update author name of authors whose book price is > 100. Prefix author name with ‘Honourable’ .
-      update author_Name from Author where in(select BookId)
+ UPDATE Author SET 
+ author_name = CONCAT('Honourable ', author_name)
+ WHERE AuthorId IN
+ (
+    SELECT AuthorId
+    FROM Book
+    WHERE Price > 100)
+
+
 ------------------------------------------------------------------------------------------------------------------------------
 
 --3.	Write a query to display authors and number of books written by that author.
